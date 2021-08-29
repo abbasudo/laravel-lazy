@@ -11,7 +11,7 @@
   ],
   "autoload": {
     "psr-4": {
-      "llabbasmkhll\\laravel-lazy\\": "src"
+      "Llabbasmkhll\\LaravelLazy\\": "src"
     }
   },
   "require-dev": {
@@ -20,7 +20,7 @@
   "extra": {
     "laravel": {
       "providers": [
-        "llabbasmkhll\\laravelLazy\\LaravelLazyServiceProvider"
+        "Llabbasmkhll\\LaravelLazy\\LaravelLazyServiceProvider"
       ]
     }
   }
