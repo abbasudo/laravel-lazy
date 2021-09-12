@@ -1,0 +1,142 @@
+<?php
+
+namespace Tests\Feature\Client;
+
+use App\Models\{{modelName}};
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\Extensions\ClientBaseTestCase;
+
+class {{modelName}}Test extends ClientBaseTestCase
+{
+	use RefreshDatabase;
+
+	/** @test */
+	function client_can_create_a_{{modelNameSingularLowerCase}}()
+	{
+		$this->setPermission('{{modelNamePluralLowerCase}}.store');
+		$attributes = {{modelName}}::factory()->raw();
+
+		$this->json('post', route('client.{{modelNamePluralLowerCase}}.store'), $attributes)
+			 ->assertStatus(201);
+		$this->assertDatabaseHas('{{modelNamePluralLowerCase}}', $attributes);
+	}
+
+
+	/** @test */
+	function other_users_cant_create_{{modelNameSingularLowerCase}}()
+	{
+		$this->otherPermissionThan('courses.store');
+		$attributes = {{modelName}}::factory()->raw();
+		$this->json('post', route('client.{{modelNamePluralLowerCase}}.store'), $attributes)
+			->assertStatus(403);
+	}
+
+	/** @test */
+	function {{modelNameSingularLowerCase}}_requires_a_property_name()
+	{
+		$this->setPermission('{{modelNamePluralLowerCase}}.store');
+		$attributes = {{modelName}}::factory()->raw(['property_name' => '']);
+
+		$this->json('post', route('client.{{modelNamePluralLowerCase}}.store'), $attributes)
+			 ->assertStatus(422)
+			 ->assertJsonStructure(['errors' => ['property_name']]);
+	}
+
+
+	/** @test */
+	function client_can_see_a_{{modelNameSingularLowerCase}}()
+	{
+		$this->setPermission('{{modelNamePluralLowerCase}}.show');
+		${{modelNameSingularLowerCase}} = {{modelName}}::factory()->create();
+
+		$this->json('get', route('client.{{modelNamePluralLowerCase}}.show' , ${{modelNameSingularLowerCase}}->id))
+			 ->assertStatus(200);
+	}
+
+	/** @test */
+	function other_users_cant_see_{{modelNameSingularLowerCase}}()
+	{
+		$this->otherPermissionThan('{{modelNamePluralLowerCase}}.show');
+		${{modelNameSingularLowerCase}} = {{modelName}}::factory()->create();
+		$this->json('get', route('client.{{modelNamePluralLowerCase}}.show' , ${{modelNameSingularLowerCase}}->id))
+			->assertStatus(403);
+	}
+
+	/** @test */
+	function client_can_update_a_{{modelNameSingularLowerCase}}()
+	{
+		$this->setPermission('{{modelNamePluralLowerCase}}.update');
+		${{modelNameSingularLowerCase}}     = {{modelName}}::factory()->create();
+		$attributes = {{modelName}}::factory()->make()->toArray();
+
+		$this->json('patch', route('client.{{modelNamePluralLowerCase}}.update' , ${{modelNameSingularLowerCase}}->id), $attributes)
+			 ->assertStatus(202);
+		$this->assertDatabaseHas('{{modelNamePluralLowerCase}}', $attributes);
+	}
+
+	/** @test */
+	function other_users_cant_update_a_{{modelNameSingularLowerCase}}()
+	{
+		$this->otherPermissionThan('{{modelNamePluralLowerCase}}.update');
+		${{modelNameSingularLowerCase}}     = {{modelName}}::factory()->create();
+		$attributes = {{modelName}}::factory()->make()->toArray();
+
+		$this->json('patch', route('client.{{modelNamePluralLowerCase}}.update' , ${{modelNameSingularLowerCase}}->id), $attributes)
+			 ->assertStatus(403);
+	}
+
+
+	/** @test */
+	function an_existing_{{modelNameSingularLowerCase}}_requires_property_name_for_update()
+	{
+		$this->setPermission('{{modelNamePluralLowerCase}}.update');
+		${{modelNameSingularLowerCase}}     = {{modelName}}::factory()->create();
+		$attributes = {{modelName}}::factory()->make(['property_name' => ''])->toArray();
+
+		$this->json('patch', route('client.{{modelNamePluralLowerCase}}.update' , ${{modelNameSingularLowerCase}}->id), $attributes)
+			 ->assertStatus(422)
+			 ->assertJsonStructure(['errors' => ['property_name']]);
+	}
+
+	/** @test */
+	function client_can_delete_a_{{modelNameSingularLowerCase}}()
+	{
+		$this->setPermission('{{modelNamePluralLowerCase}}.destroy');
+		${{modelNameSingularLowerCase}} = {{modelName}}::factory()->create();
+
+		$this->json('delete', route('client.{{modelNamePluralLowerCase}}.destroy' , ${{modelNameSingularLowerCase}}->id))
+			 ->assertStatus(202);
+	}
+
+	/** @test */
+	function other_users_cant_delete_a_{{modelNameSingularLowerCase}}()
+	{
+		$this->otherPermissionThan('{{modelNamePluralLowerCase}}.destroy');
+		${{modelNameSingularLowerCase}} = {{modelName}}::factory()->create();
+
+		$this->json('delete', route('client.{{modelNamePluralLowerCase}}.destroy' , ${{modelNameSingularLowerCase}}->id))
+			 ->assertStatus(403);
+	}
+
+	/** @test */
+	function client_can_see_a_list_of_{{modelNamePluralLowerCase}}()
+	{
+		$this->setPermission('{{modelNamePluralLowerCase}}.index');
+		${{modelNamePluralLowerCase}} = {{modelName}}::factory()->count(5)->create();
+
+		$response = $this->json('get', route('client.{{modelNamePluralLowerCase}}.index'))
+			->assertStatus(200);
+
+		$this->assertEquals(5, count($response['data']));
+	}
+
+	/** @test */
+	function other_users_cant_see_a_list_of_{{modelNamePluralLowerCase}}()
+	{
+		$this->otherPermissionThan('{{modelNamePluralLowerCase}}.index');
+		${{modelNamePluralLowerCase}} = {{modelName}}::factory()->count(5)->create();
+
+		$response = $this->json('get', route('client.{{modelNamePluralLowerCase}}.index'))
+			->assertStatus(403);
+	}
+}
