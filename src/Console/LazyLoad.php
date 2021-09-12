@@ -193,7 +193,7 @@ class LazyLoad extends Command
             $this->info('Client/'.$name.'Controller created!');
         }
 
-        if ($this->option('migrate')) {
+        if ($this->option('migration')) {
             $fileName = $this->migration($name);
             $this->info($fileName.' created!');
         }
