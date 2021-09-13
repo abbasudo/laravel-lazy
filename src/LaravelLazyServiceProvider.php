@@ -2,8 +2,6 @@
 
 namespace Llabbasmkhll\LaravelLazy;
 
-use Dotenv\Store\File\Paths;
-use Faker\Core\File;
 use Illuminate\Support\ServiceProvider;
 use Llabbasmkhll\LaravelLazy\Console\LazyLoad;
 
@@ -21,6 +19,15 @@ class LaravelLazyServiceProvider extends ServiceProvider
                 [
                     LazyLoad::class,
                 ]
+            );
+        }
+
+        if ($this->app->runningInConsole()) {
+            $this->publishes(
+                [
+                    __DIR__.'/../config/config.php' => config_path('lazy.php'),
+                ],
+                'lazy'
             );
         }
     }
