@@ -133,7 +133,6 @@ class LazyLoad extends Command
         return $fileName;
     }
 
-
     public function seeder($name)
     {
         $seederTemplate = str_replace(
@@ -152,7 +151,6 @@ class LazyLoad extends Command
         );
     }
 
-
     public function factory($name)
     {
         $factoryTemplate = str_replace(
@@ -166,7 +164,6 @@ class LazyLoad extends Command
         );
 
         file_put_contents(
-
             config('lazy.factory.path').$name.'Factory.php',
             $factoryTemplate
         );
@@ -219,7 +216,6 @@ class LazyLoad extends Command
         //            .'\', \App\Http\Controllers\Client\\'.$name.'Controller::class);'
         //            ."\n"
         //        );
-
 
         $this->info($name.' files created successfully!');
 
