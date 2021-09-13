@@ -34,12 +34,11 @@ class LazyLoad extends Command
 
     protected function getStub($type)
     {
-        return file_get_contents(__DIR__."/../stubs/$type.stub");
-    }
+        $url = File::exists(config('lazy.'.$type.'stub')) ?
+            config('lazy.'.$type.'.stub') :
+            __DIR__.'/../stubs/'.$type.'.stub';
 
-    protected function getControllerStub($type)
-    {
-        return file_get_contents(__DIR__."/../stubs/controllers/{$type}Controller.stub");
+        return file_get_contents($url);
     }
 
     protected function model($name)
@@ -50,7 +49,10 @@ class LazyLoad extends Command
             $this->getStub('Model')
         );
 
-        file_put_contents(app_path("/Models/{$name}.php"), $modelTemplate);
+        file_put_contents(
+            config('lazy.factory.path').$name.'.php',
+            $modelTemplate
+        );
     }
 
     protected function admin_controller($name)
@@ -68,13 +70,13 @@ class LazyLoad extends Command
                 strtolower($name),
                 Str::plural($name),
             ],
-            $this->getControllerStub('Admin')
+            $this->getStub('Admin')
         );
 
         File::ensureDirectoryExists(app_path('/Http/Controllers/Admin'));
 
         file_put_contents(
-            app_path('/Http/Controllers/Admin/'.$name.'Controller.php'),
+            config('lazy.admin.path').$name.'Controller.php',
             $controllerTemplate
         );
     }
@@ -94,13 +96,13 @@ class LazyLoad extends Command
                 strtolower($name),
                 Str::plural($name),
             ],
-            $this->getControllerStub('Client')
+            $this->getStub('Client')
         );
 
         File::ensureDirectoryExists(app_path('/Http/Controllers/Client'));
 
         file_put_contents(
-            app_path('/Http/Controllers/Client/'.$name.'Controller.php'),
+            config('lazy.client.path').$name.'Controller.php',
             $controllerTemplate
         );
     }
@@ -124,7 +126,7 @@ class LazyLoad extends Command
 
         $fileName = $date.'_create_'.$name.'_table.php';
         file_put_contents(
-            database_path('/migrations/'.$fileName),
+            config('lazy.migration.path').$fileName,
             $migrationTemplate
         );
 
@@ -145,7 +147,7 @@ class LazyLoad extends Command
         );
 
         file_put_contents(
-            database_path("/seeders/{$name}Seeder.php"),
+            config('lazy.seeder.path').$name.'Seeder.php',
             $seederTemplate
         );
     }
@@ -164,7 +166,8 @@ class LazyLoad extends Command
         );
 
         file_put_contents(
-            database_path("/factories/{$name}Factory.php"),
+
+            config('lazy.factory.path').$name.'Factory.php',
             $factoryTemplate
         );
     }

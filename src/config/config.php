@@ -1,28 +1,33 @@
 <?php
 
 return [
-    'admin' => [
-        'path' => '',
-        'stub' => '',
+    'Admin' => [
+        'path' => '/app/Http/Controllers/Admin/',
+        'stub' => '/resource/stubs/controllers/AdminController.stub',
     ],
 
-    'model' => [
-        'path' => '',
-        'stub' => '',
+    'Client' => [
+        'path' => '/app/Http/Controllers/Client/',
+        'stub' => '/resource/stubs/controllers/ClientController.stub',
     ],
 
-    'migration' => [
-        'path' => '',
-        'stub' => '',
+    'Model' => [
+        'path' => '/app/Models/',
+        'stub' => '/resource/stubs/Model.stub',
     ],
 
-    'factory' => [
-        'path' => '',
-        'stub' => '',
+    'Migration' => [
+        'path' => '/database/migrations/',
+        'stub' => '/resource/stubs/Migration.stub',
     ],
 
-    'seeder' => [
-        'path' => '',
-        'stub' => '',
+    'Factory' => [
+        'path' => '/database/factories/',
+        'stub' => '/resource/stubs/Factory.stub',
+    ],
+
+    'Seeder' => [
+        'path' => '/database/seeders/',
+        'stub' => '/resource/stubs/Seeder.stub',
     ],
 ];
